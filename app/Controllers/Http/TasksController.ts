@@ -51,16 +51,15 @@ export default class TasksController {
     auth,
     params,
   }: HttpContextContract) {
-    const user = auth.authenticate();
+    const user = await auth.authenticate();
     const task = await Task.find(params.id);
 
     // this validator is not required
-    await request.validate(TaskValidatorEdit);
 
     const name = request.input("name");
     const piority = request.input("piority");
 
-    if ((await user).id == task?.userId) {
+    if (user.id == task?.userId) {
       task.name = name || task.name;
       task.piority = piority || task.piority;
 
@@ -69,6 +68,31 @@ export default class TasksController {
       response.json(task);
     } else {
       response.badRequest("You cant access this route");
+    }
+  }
+
+  public async deleteTask({
+    request,
+    response,
+    auth,
+    params,
+  }: HttpContextContract) {
+    const user = await auth.authenticate();
+
+    const task = await Task.find(params.id);
+
+    if (task) {
+      if (user.id == task.userId) {
+        await task.delete();
+
+        response.json("Task deleted successfully");
+      } else {
+        response.unauthorized();
+        throw new Error("you cant access this route");
+      }
+    } else {
+      response.notFound();
+      throw new Error(`Task with id: ${params.id} not found`);
     }
   }
 }

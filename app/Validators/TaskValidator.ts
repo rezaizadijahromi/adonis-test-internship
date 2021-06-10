@@ -13,16 +13,4 @@ class TaskValidator {
   public messages = {};
 }
 
-class TaskValidatorEdit {
-  constructor(protected ctx: HttpContextContract) {}
-
-  public schema = schema.create({
-    name: schema.string({}),
-
-    piority: schema.enum(["LOW", "MEDIUM", "HIGHT"], []),
-  });
-
-  public messages = {};
-}
-
-export { TaskValidator, TaskValidatorEdit };
+export { TaskValidator };
