@@ -22,6 +22,9 @@ export default class Task extends BaseModel {
   @column()
   public piority: piorityStatus;
 
+  @column()
+  public image: string;
+
   @column.dateTime({ autoCreate: true })
   public createdAt: DateTime;
 

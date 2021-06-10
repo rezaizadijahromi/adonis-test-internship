@@ -13,6 +13,7 @@ export default class Tasks extends BaseSchema {
         .unsigned()
         .references("users.id")
         .onDelete("CASCADE"); // delete task when user is deleted
+      table.string("image", 255).nullable();
       table.timestamps(true);
     });
   }

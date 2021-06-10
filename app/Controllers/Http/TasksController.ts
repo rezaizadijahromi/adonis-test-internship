@@ -49,6 +49,16 @@ export default class TasksController {
     // add validator
     await request.validate(TaskValidator);
 
+    const validateImageOptions = {
+      types: ["image"],
+      size: "2mb",
+    };
+
+    const imageFile = request.file("image", validateImageOptions);
+    await imageFile?.move("tasks", {
+      overwrite: true,
+    });
+
     const name = request.input("name");
     const piority = request.input("piority");
 
@@ -57,6 +67,7 @@ export default class TasksController {
       task.name = name;
       task.piority = piority;
       task.userId = (await user).id;
+      task.image = imageFile?.filePath!;
       //   (await user).related("tasks").save(task);
       await task.save();
       response.json(task);
