@@ -1,10 +1,10 @@
 import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
-import { TaskValidator, TaskValidatorEdit } from "App/Validators/TaskValidator";
+import { TaskValidator } from "App/Validators/TaskValidator";
 import Task from "../../Models/Task";
 
 export default class TasksController {
   public async allTasks({ request, response }: HttpContextContract) {
-    const search = request.qs() as any;
+    const search = request.qs();
     const page = request.qs();
 
     if (search["search"]) {
@@ -12,9 +12,10 @@ export default class TasksController {
 
       response.json(tasks);
     } else if (page["page"]) {
+      const limit = page["page_size"] | 1;
       const tasks = await Task.query()
         .from("tasks")
-        .paginate(page["page"], page["page_size"]);
+        .paginate(page["page"], limit);
 
       if (tasks.length > 0) {
         response.json(tasks);
