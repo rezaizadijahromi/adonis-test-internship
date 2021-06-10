@@ -144,13 +144,28 @@ export default class AuthController {
   }
 
   public async allProfile({ request, response }: HttpContextContract) {
-    const user = User.all();
+    const page = request.qs();
 
-    if (user) {
-      return user;
+    if (page["page"]) {
+      const limit = page["page_size"] | 1;
+      const users = await User.query()
+        .from("users")
+        .paginate(page["page"], limit);
+
+      if (users.length > 0) {
+        response.json(users);
+      } else {
+        response.notFound("No users data");
+      }
     } else {
-      response.status(404);
-      response.json("No data find");
+      const user = await User.all();
+
+      if (user) {
+        return user;
+      } else {
+        response.status(404);
+        response.json("No data find");
+      }
     }
   }
 
