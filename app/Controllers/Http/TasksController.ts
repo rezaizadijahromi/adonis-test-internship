@@ -4,12 +4,31 @@ import Task from "../../Models/Task";
 
 export default class TasksController {
   public async allTasks({ request, response }: HttpContextContract) {
-    const tasks = await Task.all();
+    const search = request.qs() as any;
+    const page = request.qs();
 
-    if (tasks.length > 0) {
+    if (search["search"]) {
+      const tasks = await Task.query().where("name", search["search"]);
+
       response.json(tasks);
+    } else if (page["page"]) {
+      const tasks = await Task.query()
+        .from("tasks")
+        .paginate(page["page"], page["page_size"]);
+
+      if (tasks.length > 0) {
+        response.json(tasks);
+      } else {
+        response.notFound("No Tasks found");
+      }
     } else {
-      response.notFound("No Tasks found");
+      const tasks = await Task.all();
+
+      if (tasks.length > 0) {
+        response.json(tasks);
+      } else {
+        response.notFound("No Tasks found");
+      }
     }
   }
 
