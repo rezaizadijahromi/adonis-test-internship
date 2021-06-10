@@ -43,4 +43,6 @@ Route.group(() => {
 Route.group(() => {
   Route.post("/add", "TasksController.createTaks").middleware("auth:api");
   Route.get("/all", "TasksController.allTasks");
+  Route.get("/:id", "TasksController.getTask");
+  Route.put("/edit", "TasksController.editTask");
 }).prefix("api/tasks");
