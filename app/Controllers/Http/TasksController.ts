@@ -8,7 +8,12 @@ export default class TasksController {
     const page = request.qs();
 
     if (search["search"]) {
-      const tasks = await Task.query().where("name", search["search"]);
+      // await Post.query().where('title', 'LIKE', '%'+term+'%').fetch()
+      const tasks = await Task.query().where(
+        "name",
+        "LIKE",
+        "%" + search["search"] + "%"
+      );
 
       response.json(tasks);
     } else if (page["page"]) {
