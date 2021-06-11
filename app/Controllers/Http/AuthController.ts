@@ -9,6 +9,9 @@ import {
   emailValidator,
 } from "App/Validators/UserAuthValidator";
 import Env from "@ioc:Adonis/Core/Env";
+import Job from "../../Jobs/UserRegisterEmail";
+import { Queue } from "bullmq";
+import Bull from "bull";
 
 export default class AuthController {
   public async register({ request, auth }: HttpContextContract) {
@@ -25,6 +28,56 @@ export default class AuthController {
       newUser.password = password;
 
       await newUser.save();
+
+      const myFirstQueue = new Bull("send-email", {
+        redis: {
+          host: "127.0.0.1",
+          port: 6379,
+          // password: "root",
+        },
+      });
+
+      const options = {
+        delay: 1000, // 1 min in ms
+        attempts: 2,
+      };
+
+      const data = {
+        email: email,
+      };
+
+      myFirstQueue.add(data, options);
+
+      myFirstQueue.process(async (job) => {
+        return await sendMail(job.data.email);
+      });
+
+      function sendMail(email) {
+        return new Promise((resolve, reject) => {
+          let mailOptions = {
+            from: "rezaizadij2000@gmail.com",
+            to: email,
+            subject: "Register",
+            text: `Welcom user ${email}`,
+          };
+          let mailConfig = {
+            service: "gmail",
+            auth: {
+              user: Env.get("user"),
+              pass: Env.get("pass"),
+            },
+          };
+          nodemailer
+            .createTransport(mailConfig)
+            .sendMail(mailOptions, (err, info) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(info);
+              }
+            });
+        });
+      }
       // do not verify the user credentials
       const token = await auth.use("api").login(newUser, {
         expiresIn: "1d",
