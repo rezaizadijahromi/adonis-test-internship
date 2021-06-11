@@ -5,7 +5,10 @@ export default class AppProvider {
 
   public register() {
     // Register your own bindings
-    const providers = ["@adonisjs/validator/providers/ValidatorProvider"];
+    const providers = [
+      "@adonisjs/validator/providers/ValidatorProvider",
+      "adonis-swagger/providers/SwaggerProvider",
+    ];
   }
 
   public async boot() {
