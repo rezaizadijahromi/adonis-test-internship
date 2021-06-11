@@ -3,12 +3,31 @@ import { TaskValidator } from "App/Validators/TaskValidator";
 import Task from "../../Models/Task";
 
 export default class TasksController {
+  /**
+   * @swagger
+   * /api/tasks/all:
+   *   get:
+   *     tags:
+   *       - Test
+   *     summary: Sample API
+   *     parameters:
+   *       - name: name
+   *         description: Name of the user
+   *         in: query
+   *         required: false
+   *         type: string
+   *     responses:
+   *       200:
+   *         description: Send hello message
+   *         example:
+   *           message: Hello Guess
+   */
   public async allTasks({ request, response }: HttpContextContract) {
     const search = request.qs();
     const page = request.qs();
+    const sort = request.qs();
 
     if (search["search"]) {
-      // await Post.query().where('title', 'LIKE', '%'+term+'%').fetch()
       const tasks = await Task.query().where(
         "name",
         "LIKE",
@@ -17,7 +36,7 @@ export default class TasksController {
 
       response.json(tasks);
     } else if (page["page"]) {
-      const limit = page["page_size"] | 1;
+      const limit = page["page_size"] || 1;
       const tasks = await Task.query()
         .from("tasks")
         .paginate(page["page"], limit);
@@ -27,6 +46,14 @@ export default class TasksController {
       } else {
         response.notFound("No Tasks found");
       }
+    } else if (sort["sort"]) {
+      const sort_type: any = sort["sort_type"] || "asc";
+
+      const tasks = await Task.query()
+        .from("tasks")
+        .orderBy(sort["sort"], sort_type);
+
+      response.json(tasks);
     } else {
       const tasks = await Task.all();
 
