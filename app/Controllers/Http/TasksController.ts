@@ -22,36 +22,39 @@ export default class TasksController {
    *         example:
    *           message: Hello Guess
    */
-  public async allTasks({ request, response }: HttpContextContract) {
-    const search = request.qs();
-    const page = request.qs();
-    const sort = request.qs();
 
-    if (search["search"]) {
+  // desc Get all the tasks (search, pagination, sort are available)
+  // acc Public
+  // route api/account/upload
+
+  public async allTasks({ request, response }: HttpContextContract) {
+    const query = request.qs();
+
+    if (query["search"]) {
       const tasks = await Task.query().where(
         "name",
         "LIKE",
-        "%" + search["search"] + "%"
+        "%" + query["search"] + "%"
       );
 
       response.json(tasks);
-    } else if (page["page"]) {
-      const limit = page["page_size"] || 1;
+    } else if (query["page"]) {
+      const limit = query["page_size"] || 1;
       const tasks = await Task.query()
         .from("tasks")
-        .paginate(page["page"], limit);
+        .paginate(query["page"], limit);
 
       if (tasks.length > 0) {
         response.json(tasks);
       } else {
         response.notFound("No Tasks found");
       }
-    } else if (sort["sort"]) {
-      const sort_type: any = sort["sort_type"] || "asc";
+    } else if (query["sort"]) {
+      const sort_type: any = query["sort_type"] || "asc";
 
       const tasks = await Task.query()
         .from("tasks")
-        .orderBy(sort["sort"], sort_type);
+        .orderBy(query["sort"], sort_type);
 
       response.json(tasks);
     } else {
@@ -65,6 +68,10 @@ export default class TasksController {
     }
   }
 
+  // desc Get a single tasks
+  // acc Public
+  // route api/tasks/:id
+
   public async getTask({ request, response, params }: HttpContextContract) {
     const task = await Task.find(params.id);
 
@@ -74,6 +81,10 @@ export default class TasksController {
       response.notFound(`Task with id: ${params.id} not found`);
     }
   }
+
+  // desc Create a task
+  // acc Private
+  // route api/tasks/add
 
   public async createTaks({ request, response, auth }: HttpContextContract) {
     const user = auth.authenticate();
@@ -108,6 +119,10 @@ export default class TasksController {
     }
   }
 
+  // desc Edit task
+  // acc Private
+  // route api/tasks/edit/:id
+
   public async editTask({
     request,
     response,
@@ -133,6 +148,10 @@ export default class TasksController {
       response.badRequest("You cant access this route");
     }
   }
+
+  // desc Delete task
+  // acc Private
+  // route api/tasks/delete/:id
 
   public async deleteTask({
     request,

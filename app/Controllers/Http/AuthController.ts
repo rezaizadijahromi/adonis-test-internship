@@ -9,11 +9,14 @@ import {
   emailValidator,
 } from "App/Validators/UserAuthValidator";
 import Env from "@ioc:Adonis/Core/Env";
-import Job from "../../Jobs/UserRegisterEmail";
 import { Queue } from "bullmq";
 import Bull from "bull";
 
 export default class AuthController {
+  // desc Register a user
+  // acc public
+  // route api/account/register
+
   public async register({ request, auth }: HttpContextContract) {
     await request.validate(UserAuthValidator);
 
@@ -89,6 +92,10 @@ export default class AuthController {
     }
   }
 
+  // desc Login a user
+  // acc public
+  // route api/account/login
+
   public async login({ request, auth }: HttpContextContract) {
     await request.validate(passwordValidator);
     await request.validate(emailValidator);
@@ -103,6 +110,10 @@ export default class AuthController {
 
     return token.toJSON();
   }
+
+  // desc Sending email with token in url
+  // acc public
+  // route api/account/reset
 
   public async resetPasswordEmail({
     request,
@@ -152,6 +163,10 @@ export default class AuthController {
     }
   }
 
+  // desc Reset password
+  // acc public
+  // route api/account/reset/:token
+
   public async resetPassword({
     request,
     response,
@@ -185,6 +200,10 @@ export default class AuthController {
     }
   }
 
+  // desc See users profile
+  // acc public
+  // route api/account/profile/:id
+
   public async profile({ request, response, params }: HttpContextContract) {
     const user = await User.find(params.id);
 
@@ -195,6 +214,10 @@ export default class AuthController {
       throw new Error("User not found");
     }
   }
+
+  // desc Get all users
+  // acc public
+  // route api/account/profile/:id
 
   public async allProfile({ request, response }: HttpContextContract) {
     const page = request.qs();
@@ -221,6 +244,10 @@ export default class AuthController {
       }
     }
   }
+
+  // desc Edit profile
+  // acc Private
+  // route api/account/profile/edit/:id
 
   public async editProfile({
     request,
@@ -266,6 +293,10 @@ export default class AuthController {
     }
   }
 
+  // desc Delete profile
+  // acc Private
+  // route api/account/profile/delete/:id
+
   public async deleteProfile({
     request,
     response,
@@ -286,6 +317,10 @@ export default class AuthController {
       throw new Error("You are not allow to delete this profile");
     }
   }
+
+  // desc Test for upload image
+  // acc Public
+  // route api/account/upload
 
   public async uploadImage({ request, response, auth }: HttpContextContract) {
     try {
@@ -317,6 +352,10 @@ export default class AuthController {
       console.log(error);
     }
   }
+
+  // desc Download image
+  // acc Private
+  // route api/account/download/:filename
 
   public async downloadImage({
     request,
