@@ -1,7 +1,6 @@
 "# adonis-test-internship" 
 
 ## Requirments
-  * you need to install mysql 
   * Node.js >= 8.0.0
   * npm >= 3.0.0
   * git
