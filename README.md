@@ -8,14 +8,59 @@
   * mysql
   * postman
 
+## initial setup
 
-## installation
-  * clone the project use git clone ....
-  * go to project folder and in your terminal or in your command prompt if you use windows "npm install" it might take afew minutes or second depends on your machine
-  * in your mysql create schema "test" (we use test db for this project)
-  * next step run this command for adding your migration to your database "node ace make:migration"
-  * then type "node ace serve --watch" 
-  * project shuld be start on "http://127.0.0.1:3333"
+clone the project first and go inside project folder
+
+```bash
+git clone https://git...
+cd project_name
+```
+
+#### Nodejs
+Check your Node.js version and ensure you are running Node >= 8.0.0
+
+#### install dependencies
+
+```bash
+npm install
+```
+
+## for testing
+
+run the following commands in order
+
+```bash
+cp .env.example .env
+node ace generate:key
+```
+
+then edit .env file and put your system configurations and key in it
+
+
+
+### Starting the development server
+
+```bash
+node ace serve --watch
+```
+
+### Migration
+
+```bash
+node ace migration:run
+```
+
+## Env settings
+**PORT** : Port this app is going to run on 3333
+
+**MYSQL_USER** : If you change the username or password during installation you should  user those if you not default should be root   
+
+
+### Db setting
+
+- go to .env file and for MYSQL_USER and MYSQL_PASSWORD add your username and password (when you installing mysql ask you to add password and username default is root but if you change the default you should add your username and password)
+
   
-  - now you are good to go and test it on postman for start register for getting a token 
-  to access private route by adding that token
+- now you are good to go and test it on postman for start register for getting a token 
+to access private route by adding that token
