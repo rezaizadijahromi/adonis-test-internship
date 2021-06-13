@@ -82,11 +82,8 @@ export default class AuthController {
         });
       }
       // do not verify the user credentials
-      const token = await auth.use("api").login(newUser, {
-        expiresIn: "1d",
-      });
 
-      return token.toJSON();
+      return newUser;
     } else {
       return "User already exists";
     }

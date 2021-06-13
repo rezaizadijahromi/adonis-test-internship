@@ -1,6 +1,6 @@
 import BaseSeeder from "@ioc:Adonis/Lucid/Seeder";
 import User from "App/Models/User";
-import bcrypt from "bcryptjs";
+import Hash from "@ioc:Adonis/Core/Hash";
 
 export default class UserSeeder extends BaseSeeder {
   public static developmentOnly = true;
@@ -8,12 +8,12 @@ export default class UserSeeder extends BaseSeeder {
   public async run() {
     await User.createMany([
       {
-        email: "john@example.com",
-        password: bcrypt.hashSync("123456", 10),
+        email: "john@gmail.com",
+        password: "123456",
       },
       {
-        email: "jane@example.com",
-        password: bcrypt.hashSync("123456", 10),
+        email: "jane@gmail.com",
+        password: "123456",
       },
     ]);
   }
