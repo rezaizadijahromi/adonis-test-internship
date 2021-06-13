@@ -1,4 +1,4 @@
-"# adonis-test-internship" 
+# adonis-test-internship
 
 ## Requirments
   * Node.js >= 8.0.0
