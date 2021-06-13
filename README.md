@@ -1,6 +1,19 @@
 "# adonis-test-internship" 
 
-## install project
+## Requirments
+  * you need to install mysql 
+  * Node.js >= 8.0.0
+  * npm >= 3.0.0
+  * git
+  * typescript
+
+
+## installation
   * clone the project use git clone ....
   * go to project folder and in your terminal or in your command prompt if you use windows "npm install" it might take afew minutes or second depends on your machine
-  * at the end type "node ace serve --watch"
+  * in your mysql create schema "test" (we use test db for this project)
+  * then type "node ace serve --watch" 
+  * project shuld be start on "http://127.0.0.1:3333"
+  
+  - now you are good to go and test it on postman for start register for getting a token 
+  to access private route by adding that token
