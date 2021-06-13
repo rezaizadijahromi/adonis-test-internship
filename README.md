@@ -53,7 +53,9 @@ node ace migration:run
 
 ### Bull config
   - for running bull you should install redis before 
-  - running redis for sending welcome email ```bash redis-server``` to start redis server
+  - running redis for sending welcome email run ```
+   redis-server ``` to start redis server
+   
 
 ## Env settings
 **PORT** : Port this app is going to run on 3333
