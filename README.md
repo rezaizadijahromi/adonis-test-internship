@@ -6,6 +6,8 @@
   * npm >= 3.0.0
   * git
   * typescript
+  * mysql
+  * postman
 
 
 ## installation
