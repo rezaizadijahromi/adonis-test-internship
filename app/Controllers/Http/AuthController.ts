@@ -41,7 +41,7 @@ export default class AuthController {
       });
 
       const options = {
-        delay: 1000, // 1 min in ms
+        delay: 100, // 10 sec in ms
         attempts: 2,
       };
 
