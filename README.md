@@ -14,7 +14,7 @@
 clone the project first and go inside project folder
 
 ```bash
-git clone https://git...
+git clone https://github.com/rezaizadijahromi/adonis-test-internship.git
 cd adonis-test-internship
 ```
 
