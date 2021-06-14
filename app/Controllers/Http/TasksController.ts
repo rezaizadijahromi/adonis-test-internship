@@ -2,10 +2,15 @@ import { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import { TaskValidator } from "App/Validators/TaskValidator";
 import Task from "../../Models/Task";
 
+// Guide for comments
+// desc => description (a little note about function)
+// acc => access public | private if its public then mean user can access without authentication if its private then user must authenticate
+// route => This is route we specifie in routes file
+
 export default class TasksController {
   // desc Get all the tasks (search, pagination, sort are available)
   // acc Public
-  // route api/account/upload
+  // route api/tasks/all
 
   public async allTasks({ request, response }: HttpContextContract) {
     const query = request.qs();
@@ -99,7 +104,7 @@ export default class TasksController {
     }
   }
 
-  // desc Edit task
+  // desc Edit a task
   // acc Private
   // route api/tasks/edit/:id
 
@@ -129,7 +134,7 @@ export default class TasksController {
     }
   }
 
-  // desc Delete task
+  // desc Delete a task
   // acc Private
   // route api/tasks/delete/:id
 
