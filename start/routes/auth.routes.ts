@@ -5,4 +5,4 @@ Route.group(() => {
   Route.post("/login", "AuthController.login");
   Route.post("/reset", "AuthController.resetPasswordEmail");
   Route.put("/reset/:token", "AuthController.resetPassword");
-}).middleware("auth:api");
+}).prefix("api/account");
