@@ -57,7 +57,7 @@ export default class TasksController {
   // acc Public
   // route api/tasks/:id
 
-  public async getTask({ request, response, params }: HttpContextContract) {
+  public async getTask({ response, params }: HttpContextContract) {
     const task = await Task.find(params.id);
 
     if (task) {
@@ -138,12 +138,7 @@ export default class TasksController {
   // acc Private
   // route api/tasks/delete/:id
 
-  public async deleteTask({
-    request,
-    response,
-    auth,
-    params,
-  }: HttpContextContract) {
+  public async deleteTask({ response, auth, params }: HttpContextContract) {
     const user = await auth.authenticate();
 
     const task = await Task.find(params.id);

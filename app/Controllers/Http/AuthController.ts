@@ -122,7 +122,7 @@ export default class AuthController {
     const user = await User.findBy("email", email);
 
     if (user) {
-      let transporter = nodemailer.createTransport({
+      nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
         secure: false, // true for 465, false for other ports
@@ -132,7 +132,7 @@ export default class AuthController {
         },
       });
 
-      const token = jwt.sign({ email: email }, Env.get("JWT_SECRET"), {
+      jwt.sign({ email: email }, Env.get("JWT_SECRET"), {
         expiresIn: "5m",
       });
       console.log(Env.get("EMAIL_FROM"));
@@ -336,7 +336,7 @@ export default class AuthController {
     const user = await auth.authenticate();
 
     const filePath = `uploads/${params.fileName}`;
-    const fileExist = response.download(filePath);
+    response.download(filePath);
     await user.save();
   }
 }
