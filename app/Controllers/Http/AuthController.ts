@@ -36,7 +36,6 @@ export default class AuthController {
         redis: {
           host: "127.0.0.1",
           port: 6379,
-          // password: "root",
         },
       });
 
@@ -81,7 +80,6 @@ export default class AuthController {
             });
         });
       }
-      // do not verify the user credentials
 
       return newUser;
     } else {
@@ -267,7 +265,6 @@ export default class AuthController {
 
     const imageFile = request.file("image", validateOptions);
     await imageFile?.move("uploads", {
-      // name: "name.jpg",
       overwrite: true,
     });
 
@@ -368,48 +365,3 @@ export default class AuthController {
     await user.save();
   }
 }
-
-// Old tasks
-
-//   public async createAccount({ request }: HttpContextContract) {
-//     const email = request.input("email");
-//     const password = request.input("password");
-
-//     const newUSer = new User();
-//     newUSer.email = email;
-//     newUSer.password = password;
-
-//     await newUSer.save();
-
-//     return newUSer;
-//   }
-
-//   public async showAll({ request }: HttpContextContract) {
-//     return await User.all();
-//   }
-
-//   public async editAccount({ request, params }: HttpContextContract) {
-//     const account = await User.find(params.id);
-
-//     if (account) {
-//       account.email = request.input("email");
-//       account.password = request.input("password");
-
-//       await account.save();
-
-//       return account;
-//     }
-//     return;
-//   }
-
-//   public async deleteAccount({ request, params }: HttpContextContract) {
-//     const account = await User.find(params.id);
-
-//     if (account) {
-//       account.delete();
-
-//       return "deleted";
-//     }
-
-//     return;
-//   }

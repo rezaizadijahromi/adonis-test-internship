@@ -3,26 +3,6 @@ import { TaskValidator } from "App/Validators/TaskValidator";
 import Task from "../../Models/Task";
 
 export default class TasksController {
-  /**
-   * @swagger
-   * /api/tasks/all:
-   *   get:
-   *     tags:
-   *       - Test
-   *     summary: Sample API
-   *     parameters:
-   *       - name: name
-   *         description: Name of the user
-   *         in: query
-   *         required: false
-   *         type: string
-   *     responses:
-   *       200:
-   *         description: Send hello message
-   *         example:
-   *           message: Hello Guess
-   */
-
   // desc Get all the tasks (search, pagination, sort are available)
   // acc Public
   // route api/account/upload
