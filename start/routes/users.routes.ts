@@ -8,5 +8,6 @@ Route.group(() => {
     Route.put("edit/:id", "AuthController.editProfile");
     Route.delete("delete/:id", "AuthController.deleteProfile");
     Route.get("download/:fileName", "AuthController.downloadImage");
+    Route.post("/test", "AuthController.addTaskToUser");
   }).middleware("auth:api");
 }).prefix("api/account");

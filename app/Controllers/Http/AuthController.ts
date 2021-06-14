@@ -10,6 +10,7 @@ import {
 } from "App/Validators/UserAuthValidator";
 import Env from "@ioc:Adonis/Core/Env";
 import Bull from "bull";
+import Task from "App/Models/Task";
 
 // Guide for comments
 // desc => description (a little note about function)
@@ -327,5 +328,21 @@ export default class AuthController {
     const filePath = `uploads/${params.fileName}`;
     response.download(filePath);
     await user.save();
+  }
+
+  // desc testing @hasMany (this route is just for testing)
+  // acc private
+  // route api/account/test
+
+  public async addTaskToUser({ request, response, auth }: HttpContextContract) {
+    const user = await auth.authenticate();
+    user.preload("tasks");
+    const id = request.input("id");
+
+    const taskObj = (await Task.find(id)) as Task;
+
+    user.tasks.push(taskObj);
+
+    response.json(user);
   }
 }
