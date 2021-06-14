@@ -135,7 +135,6 @@ export default class AuthController {
       jwt.sign({ email: email }, Env.get("JWT_SECRET"), {
         expiresIn: "5m",
       });
-      console.log(Env.get("EMAIL_FROM"));
 
       // send mail with defined transport object
 
@@ -262,8 +261,6 @@ export default class AuthController {
       // storing the path of image
       profile.image = imageFile?.filePath!;
 
-      console.log(imageFile?.filePath);
-
       await profile?.save();
 
       response.json("Profile updated");
@@ -297,7 +294,7 @@ export default class AuthController {
   // acc Public
   // route api/account/upload
 
-  public async uploadImage({ request }: HttpContextContract) {
+  public async uploadImage({ request, response }: HttpContextContract) {
     try {
       const validateOptions = {
         types: ["image"],
@@ -305,18 +302,10 @@ export default class AuthController {
       };
 
       const imageFile = request.file("image", validateOptions);
-      console.log(imageFile?.tmpPath);
-
-      const name = request.only(["name"]);
-
-      console.log(name);
 
       await imageFile?.move("uploads", {
-        // name: "name.jpg",
         overwrite: true,
       });
-
-      console.log(imageFile?.filePath);
 
       if (!imageFile) {
         return "Error accured";
@@ -324,7 +313,7 @@ export default class AuthController {
 
       return "Uploaded";
     } catch (error) {
-      console.log(error);
+      response.json(error);
     }
   }
 
