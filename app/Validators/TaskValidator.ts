@@ -7,7 +7,7 @@ class TaskValidator {
   public schema = schema.create({
     name: schema.string({}, [rules.required()]),
 
-    piority: schema.enum(["LOW", "MEDIUM", "HIGHT"], [rules.required()]),
+    piority: schema.enum(["low", "medium", "high"], [rules.required()]),
   });
 
   public messages = {};
