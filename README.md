@@ -53,6 +53,9 @@ npm install
 - pass is the password for that email
 - and also you should active less secure in your profile to sending an email
 
+**EMAIL_FROM** :
+ - You can add your email address just for the users to know who is sending email 
+
 ## for testing
 
 run the following commands in order
