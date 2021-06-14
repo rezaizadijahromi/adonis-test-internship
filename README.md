@@ -64,12 +64,6 @@ node ace generate:key
 
 then edit .env file and put your system configurations and key in it
 
-### Starting the development server
-
-```bash
-node ace serve --watch
-```
-
 ### Migration
 
 ```bash
@@ -82,6 +76,12 @@ run following command for insert needed data to database
 
 ```bash
 node ace db:seed
+```
+
+### Starting the development server
+
+```bash
+node ace serve --watch
 ```
 
 ### Bull config
