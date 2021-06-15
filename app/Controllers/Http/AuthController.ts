@@ -122,7 +122,7 @@ export default class AuthController {
     const user = await User.findBy("email", email);
 
     if (user) {
-      nodemailer.createTransport({
+      let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
         secure: false, // true for 465, false for other ports
@@ -132,11 +132,25 @@ export default class AuthController {
         },
       });
 
-      jwt.sign({ email: email }, Env.get("JWT_SECRET"), {
+      const token = jwt.sign({ email: email }, Env.get("JWT_SECRET"), {
         expiresIn: "5m",
       });
+      console.log(Env.get("EMAIL_FROM"));
 
       // send mail with defined transport object
+      let info = await transporter.sendMail({
+        from: Env.get("EMAIL_FROM"), // sender address
+        to: email, // list of receivers
+        subject: "Hello ✔", // Subject line
+        text: "Hello world?", // plain text body
+        html: `
+            <h1>Please use the following to activate your account</h1>
+            <p>${Env.get("CLIENT_URL")}/accounts/reset/${token}</p>
+            <hr />
+            <p>This email may containe sensetive information</p>
+            <p>${Env.get("CLIENT_URL")}</p>
+        `, // html body
+      });
 
       return "Sent";
     } else {
