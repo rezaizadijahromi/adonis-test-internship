@@ -26,6 +26,7 @@ export default class AuthController {
 
     const email = request.input("email");
     const password = request.input("password");
+    const isAdmin = request.input("isAdmin");
 
     const userExist = await User.findBy("email", email);
 
@@ -33,6 +34,7 @@ export default class AuthController {
       const newUser = new User();
       newUser.email = email;
       newUser.password = password;
+      newUser.isAdmin = isAdmin;
 
       await newUser.save();
 
@@ -269,7 +271,7 @@ export default class AuthController {
       overwrite: true,
     });
 
-    if (user.id == params.id) {
+    if (user.id == params.id || user.isAdmin) {
       profile.email = email || profile.email;
       profile.password = password || profile.password;
       // storing the path of image
@@ -293,7 +295,7 @@ export default class AuthController {
 
     const profile = await User.find(params.id);
 
-    if (user.id == params.id) {
+    if (user.id == params.id || user.isAdmin) {
       profile?.delete();
 
       // then must be logout as well

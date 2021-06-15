@@ -115,14 +115,14 @@ export default class TasksController {
     params,
   }: HttpContextContract) {
     const user = await auth.authenticate();
-    const task = await Task.find(params.id);
+    const task = (await Task.find(params.id)) as Task;
 
     // this validator is not required
 
     const name = request.input("name");
     const piority = request.input("piority");
 
-    if (user.id == task?.userId) {
+    if (user.id == task?.userId || user.isAdmin) {
       task.name = name || task.name;
       task.piority = piority || task.piority;
 
@@ -144,7 +144,7 @@ export default class TasksController {
     const task = await Task.find(params.id);
 
     if (task) {
-      if (user.id == task.userId) {
+      if (user.id == task.userId || user.isAdmin) {
         await task.delete();
 
         response.json("Task deleted successfully");

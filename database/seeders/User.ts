@@ -10,10 +10,12 @@ export default class UserSeeder extends BaseSeeder {
       {
         email: "john@gmail.com",
         password: "123456",
+        isAdmin: true,
       },
       {
         email: "jane@gmail.com",
         password: "123456",
+        isAdmin: false,
       },
     ]);
   }
