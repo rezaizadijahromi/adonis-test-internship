@@ -261,13 +261,13 @@ export default class AuthController {
 
     const email = request.input("email");
     const password = request.input("password");
+    const profile = (await User.find(params.id)) as User;
 
     const imageFile = request.file("image", validateOptions);
     await imageFile?.move("uploads", {
+      name: `${profile.id}.jpg`,
       overwrite: true,
     });
-
-    const profile = (await User.find(params.id)) as User;
 
     if (user.id == params.id) {
       profile.email = email || profile.email;
