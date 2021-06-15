@@ -21,7 +21,7 @@ export default class AuthController {
   // acc public
   // route api/account/register
 
-  public async register({ request }: HttpContextContract) {
+  public async register({ request, response }: HttpContextContract) {
     await request.validate(UserAuthValidator);
 
     const email = request.input("email");
@@ -87,9 +87,15 @@ export default class AuthController {
         });
       }
 
-      return newUser;
+      response.json({
+        status: "success",
+        data: newUser,
+      });
     } else {
-      return "User already exists";
+      response.json({
+        status: "failed",
+        message: "User already exist",
+      });
     }
   }
 
@@ -97,7 +103,7 @@ export default class AuthController {
   // acc public
   // route api/account/login
 
-  public async login({ request, auth }: HttpContextContract) {
+  public async login({ request, auth, response }: HttpContextContract) {
     await request.validate(passwordValidator);
     await request.validate(emailValidator);
 
@@ -109,7 +115,17 @@ export default class AuthController {
       expiresIn: "1d",
     });
 
-    return token.toJSON();
+    if (token) {
+      response.json({
+        status: "success",
+        data: {
+          token: {
+            type: token.type,
+            token: token.token,
+          },
+        },
+      });
+    }
   }
 
   // desc Sending email with token in url
@@ -137,7 +153,6 @@ export default class AuthController {
       const token = jwt.sign({ email: email }, Env.get("JWT_SECRET"), {
         expiresIn: "5m",
       });
-      console.log(Env.get("EMAIL_FROM"));
 
       // send mail with defined transport object
       let info = await transporter.sendMail({
@@ -154,9 +169,15 @@ export default class AuthController {
         `, // html body
       });
 
-      return "Sent";
+      response.json({
+        status: "sucess",
+        message: `Email send to ${email}`,
+      });
     } else {
-      response.json("User not found");
+      response.json({
+        status: "failed",
+        message: "User not found",
+      });
     }
   }
 
@@ -186,13 +207,22 @@ export default class AuthController {
           user.password = newPassword;
           await user.save();
 
-          return user;
+          response.json({
+            status: "success",
+            data: user,
+          });
         } else {
-          response.json("User not found");
+          response.json({
+            status: "failed",
+            message: "User not found",
+          });
         }
       }
     } else {
-      response.json("Wrong data");
+      response.json({
+        status: "failed",
+        message: "Token is expired",
+      });
     }
   }
 
@@ -204,10 +234,16 @@ export default class AuthController {
     const user = await User.find(params.id);
 
     if (user) {
-      response.json(user);
+      response.json({
+        status: "sucess",
+        data: user,
+      });
     } else {
       response.status(404);
-      throw new Error("User not found");
+      response.json({
+        status: "failed",
+        message: `User with id ${params.id} not found`,
+      });
     }
   }
 
@@ -225,18 +261,29 @@ export default class AuthController {
         .paginate(page["page"], limit);
 
       if (users.length > 0) {
-        response.json(users);
+        response.json({
+          status: "success",
+          data: users,
+        });
       } else {
-        response.notFound("No users data");
+        response.notFound({
+          status: "sucess",
+          message: "No data found",
+        });
       }
     } else {
-      const user = await User.all();
+      const users = await User.all();
 
-      if (user) {
-        return user;
+      if (users) {
+        response.json({
+          status: "success",
+          data: users,
+        });
       } else {
-        response.status(404);
-        response.json("No data find");
+        response.notFound({
+          status: "sucess",
+          message: "No data found",
+        });
       }
     }
   }
@@ -271,18 +318,30 @@ export default class AuthController {
       overwrite: true,
     });
 
-    if (user.id == params.id || user.isAdmin) {
-      profile.email = email || profile.email;
-      profile.password = password || profile.password;
-      // storing the path of image
-      profile.image = imageFile?.filePath!;
+    if (profile) {
+      if (user.id == params.id || user.isAdmin) {
+        profile.email = email || profile.email;
+        profile.password = password || profile.password;
+        // storing the path of image
+        profile.image = imageFile?.filePath!;
 
-      await profile?.save();
+        const user = await profile?.save();
 
-      response.json("Profile updated");
+        response.json({
+          status: "sucess",
+          data: user,
+        });
+      } else {
+        response.json({
+          status: "failed",
+          message: "You can't edit this user profile",
+        });
+      }
     } else {
-      response.status(400);
-      throw new Error("You can't edit this user profile");
+      response.notFound({
+        status: "failed",
+        message: `User with id ${params.id} not found`,
+      });
     }
   }
 
@@ -295,14 +354,26 @@ export default class AuthController {
 
     const profile = await User.find(params.id);
 
-    if (user.id == params.id || user.isAdmin) {
-      profile?.delete();
+    if (profile) {
+      if (user.id == params.id || user.isAdmin) {
+        profile?.delete();
 
-      // then must be logout as well
-      response.json("Profile deleted");
+        // then must be logout as well
+        response.json({
+          status: true,
+          message: "Profile deleted",
+        });
+      } else {
+        response.json({
+          status: false,
+          message: "You can't delete this user profile",
+        });
+      }
     } else {
-      response.status(400);
-      throw new Error("You are not allow to delete this profile");
+      response.notFound({
+        status: "failed",
+        message: `User with id ${params.id} not found`,
+      });
     }
   }
 

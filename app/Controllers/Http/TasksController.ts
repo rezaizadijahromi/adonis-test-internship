@@ -30,9 +30,15 @@ export default class TasksController {
         .paginate(query["page"], limit);
 
       if (tasks.length > 0) {
-        response.json(tasks);
+        response.json({
+          status: "success",
+          data: tasks,
+        });
       } else {
-        response.notFound("No Tasks found");
+        response.notFound({
+          status: "success",
+          message: "No data found",
+        });
       }
     } else if (query["sort"]) {
       const sort_type: any = query["sort_type"] || "asc";
@@ -41,14 +47,23 @@ export default class TasksController {
         .from("tasks")
         .orderBy(query["sort"], sort_type);
 
-      response.json(tasks);
+      response.json({
+        status: "success",
+        data: tasks,
+      });
     } else {
       const tasks = await Task.all();
 
       if (tasks.length > 0) {
-        response.json(tasks);
+        response.json({
+          status: "success",
+          data: tasks,
+        });
       } else {
-        response.notFound("No Tasks found");
+        response.notFound({
+          status: "success",
+          message: "No data found",
+        });
       }
     }
   }
@@ -61,9 +76,15 @@ export default class TasksController {
     const task = await Task.find(params.id);
 
     if (task) {
-      response.json(task);
+      response.json({
+        status: "success",
+        data: task,
+      });
     } else {
-      response.notFound(`Task with id: ${params.id} not found`);
+      response.notFound({
+        status: "failed",
+        message: `Task with id: ${params.id} not found`,
+      });
     }
   }
 
@@ -98,9 +119,15 @@ export default class TasksController {
       task.image = imageFile?.filePath!;
       //   (await user).related("tasks").save(task);
       await task.save();
-      response.json(task);
+      response.json({
+        status: "success",
+        data: task,
+      });
     } else {
-      response.badRequest("Bad request");
+      response.unauthorized({
+        status: "faield",
+        message: "Not authorized",
+      });
     }
   }
 
@@ -128,9 +155,15 @@ export default class TasksController {
 
       await task.save();
 
-      response.json(task);
+      response.json({
+        status: "success",
+        data: task,
+      });
     } else {
-      response.badRequest("You cant access this route");
+      response.badRequest({
+        status: "failed",
+        message: `Task with id: ${params.id} not found`,
+      });
     }
   }
 
@@ -147,14 +180,20 @@ export default class TasksController {
       if (user.id == task.userId || user.isAdmin) {
         await task.delete();
 
-        response.json("Task deleted successfully");
+        response.json({
+          status: true,
+        });
       } else {
-        response.unauthorized();
-        throw new Error("you cant access this route");
+        response.unauthorized({
+          status: false,
+          message: "You cant delete this task",
+        });
       }
     } else {
-      response.notFound();
-      throw new Error(`Task with id: ${params.id} not found`);
+      response.notFound({
+        status: "failed",
+        message: "Task not found",
+      });
     }
   }
 }
