@@ -376,33 +376,6 @@ export default class AuthController {
     }
   }
 
-  // desc Test for upload image
-  // acc Public
-  // route api/account/upload
-
-  public async uploadImage({ request, response }: HttpContextContract) {
-    try {
-      const validateOptions = {
-        types: ["image"],
-        size: "1mb",
-      };
-
-      const imageFile = request.file("image", validateOptions);
-
-      await imageFile?.move("uploads", {
-        overwrite: true,
-      });
-
-      if (!imageFile) {
-        return "Error accured";
-      }
-
-      return "Uploaded";
-    } catch (error) {
-      response.json(error);
-    }
-  }
-
   // desc Download the image
   // acc Private
   // route api/account/download/:filename
