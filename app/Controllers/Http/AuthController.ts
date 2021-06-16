@@ -315,6 +315,7 @@ export default class AuthController {
     const imageFile = request.file("image", validateOptions);
     await imageFile?.move("uploads", {
       name: `${profile.id}.jpg`,
+      overwrite: true,
     });
 
     if (profile) {
@@ -323,6 +324,8 @@ export default class AuthController {
         profile.password = password || profile.password;
         // storing the path of image
         profile.image = imageFile?.filePath!;
+
+        console.log(profile.image);
 
         const user = await profile?.save();
 
@@ -342,6 +345,18 @@ export default class AuthController {
         message: `User with id ${params.id} not found`,
       });
     }
+  }
+
+  // desc Download the image
+  // acc Private
+  // route api/account/download/:filename
+
+  public async downloadImage({ response, params, auth }: HttpContextContract) {
+    const user = await auth.authenticate();
+
+    const filePath = `uploads//${params.id}.jpg`;
+    response.download(filePath);
+    await user.save();
   }
 
   // desc Delete profile
@@ -374,17 +389,5 @@ export default class AuthController {
         message: `User with id ${params.id} not found`,
       });
     }
-  }
-
-  // desc Download the image
-  // acc Private
-  // route api/account/download/:filename
-
-  public async downloadImage({ response, params, auth }: HttpContextContract) {
-    const user = await auth.authenticate();
-
-    const filePath = `uploads//${params.id}.jpg`;
-    response.download(filePath);
-    await user.save();
   }
 }

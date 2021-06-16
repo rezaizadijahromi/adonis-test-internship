@@ -32,11 +32,7 @@ class passwordValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   public schema = schema.create({
-    password: schema.string({}, [
-      rules.required(),
-      rules.minLength(3),
-      rules.maxLength(255),
-    ]),
+    password: schema.string({}, [rules.minLength(3), rules.maxLength(255)]),
   });
 }
 
