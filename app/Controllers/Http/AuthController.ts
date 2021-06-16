@@ -314,8 +314,7 @@ export default class AuthController {
 
     const imageFile = request.file("image", validateOptions);
     await imageFile?.move("uploads", {
-      name: `${profile.id}.jpg`,
-      overwrite: true,
+      name: `${profile.id}`,
     });
 
     if (profile) {
@@ -411,7 +410,7 @@ export default class AuthController {
   public async downloadImage({ response, params, auth }: HttpContextContract) {
     const user = await auth.authenticate();
 
-    const filePath = `uploads/${params.fileName}`;
+    const filePath = `uploads/${user.id}`;
     response.download(filePath);
     await user.save();
   }
