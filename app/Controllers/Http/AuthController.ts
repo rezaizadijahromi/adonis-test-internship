@@ -300,9 +300,6 @@ export default class AuthController {
   }: HttpContextContract) {
     const user = await auth.authenticate();
 
-    await request.validate(emailValidator);
-    await request.validate(passwordValidator);
-
     const validateOptions = {
       types: ["image"],
       size: "1mb",
