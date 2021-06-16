@@ -52,6 +52,17 @@ npm install
 - for the **user** you should provide your own email address
 - pass is the password for that email
 - and also you should active less secure in your profile to sending an email
+  - for activing less secure in your Gmail account follow the next steps
+  - ![Screenshot (107)](https://user-images.githubusercontent.com/46366715/122222691-bbd45280-cec7-11eb-8ddb-7af400a6b49d.png)
+  - ![Screenshot (108)](https://user-images.githubusercontent.com/46366715/122222717-c1319d00-cec7-11eb-8955-2d9ae954ac24.png)
+  - ![Screenshot (109)](https://user-images.githubusercontent.com/46366715/122222737-c68ee780-cec7-11eb-9be8-d0e25d91bb3c.png)
+  - now you are be able to sending emails with your gmail account
+
+
+  
+
+
+ 
 
 **EMAIL_FROM** :
  - You can add your email address just for the users to know who is sending email 
