@@ -161,7 +161,7 @@ export default class AuthController {
         subject: "Hello ✔", // Subject line
         text: "Hello world?", // plain text body
         html: `
-            <h1>Please use the following to activate your account</h1>
+            <h1>Please enter the link to navigate you for changing a password</h1>
             <p>${Env.get("CLIENT_URL")}/accounts/reset/${token}</p>
             <hr />
             <p>This email may containe sensetive information</p>
