@@ -22,7 +22,10 @@ export default class TasksController {
         "%" + query["search"] + "%"
       );
 
-      response.json(tasks);
+      response.json({
+        status: "success",
+        data: tasks,
+      });
     } else if (query["page"]) {
       const limit = query["page_size"] || 1;
       const tasks = await Task.query()
