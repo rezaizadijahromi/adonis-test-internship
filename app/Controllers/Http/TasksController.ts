@@ -21,6 +21,16 @@ export default class TasksController {
         "LIKE",
         "%" + query["search"] + "%"
       );
+      response.json({
+        status: "success",
+        data: tasks,
+      });
+    } else if (query["piority"]) {
+      const tasks = await Task.query().where(
+        "piority",
+        "LIKE",
+        "%" + query["piority"] + "%"
+      );
 
       response.json({
         status: "success",
